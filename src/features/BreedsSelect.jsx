@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getBreeds, getCatsImagesByBreed } from './breedsAPI';
 import CatImage from '../components/CatImage';
+import BreedInfo from '../components/BreedInfo';
 
 
 const BreedsSelect = () => {
@@ -8,6 +9,8 @@ const BreedsSelect = () => {
     const [selectedBreed, setSelectedBreed] = useState('');
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    const [breedInfo, setBreedInfo] = useState(null);
 
 
     useEffect(() => {
@@ -30,7 +33,7 @@ const BreedsSelect = () => {
         const loadImages = async () => {
             setLoading(true);
             try {
-                const data = await getCatsImagesByBreed(selectedBreed, 20);
+                const data = await getCatsImagesByBreed(selectedBreed, 1);
                 setImages(data);
             } catch (error) {
                 console.error('Download error:', error);
@@ -40,32 +43,43 @@ const BreedsSelect = () => {
         };
 
         loadImages();
-    }, [selectedBreed]);
+
+
+        const selected = breeds.find((breed) => breed.id === selectedBreed);
+        setBreedInfo(selected);
+
+    }, [breeds, selectedBreed]);
+
 
     return (
-        <div className='grid grid-cols-4 grid-rows-3 gap-1'>
+        <div className='grid grid-cols-3 gap-8'>
 
 
-
-
-            <ul className='row-span-3'>
+            <ul className=''>
                 {breeds.map((breed) => (
                     <li key={breed.id}>
                         <button className='bg-blue-200 w-60 text-left p-2' onClick={() => setSelectedBreed(breed.id)} >
                             {breed.name}
                         </button>
-
                     </li>
                 ))}
             </ul>
 
-            {loading && <p>Завантаження фото...</p>}
 
-            <div className='col-span-3 row-span-3'>
+
+
+
+            {loading && <p>Loading...</p>}
+
+            <div className=''>
                 {images.map((img) => (
                     <CatImage key={img.id} src={img.url} />
                 ))}
             </div>
+
+            {breedInfo && <BreedInfo info={breedInfo} />}
+
+
         </div>
     );
 };

@@ -7,7 +7,7 @@ import BreedsSelect from '../features/BreedsSelect';
 
 const HomePage = () => (
 
-    <div className='m-0 p-0 box-border'>
+    <div className=''>
         <Header />
         <BreedsSelect />
         <CatImage />
