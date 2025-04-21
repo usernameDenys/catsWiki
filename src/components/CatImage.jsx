@@ -2,7 +2,7 @@ const CatImage = ({ src }) => (
     <img
         src={src}
         alt="Cat"
-        className=" object-cover rounded shadow"
+        className=" aspect-3/2 object-cover rounded-lg w-auto mb-[20px]"
     />
 );
 

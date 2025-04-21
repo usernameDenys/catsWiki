@@ -8,16 +8,19 @@ const BreedsSelect = () => {
     const [breeds, setBreeds] = useState([]);
     const [selectedBreed, setSelectedBreed] = useState('');
     const [images, setImages] = useState([]);
-    const [loading, setLoading] = useState(false);
+
 
     const [breedInfo, setBreedInfo] = useState(null);
-
 
     useEffect(() => {
         const loadBreeds = async () => {
             try {
                 const data = await getBreeds();
                 setBreeds(data);
+
+                if (data.length > 0) {
+                    setSelectedBreed(data[0].id);
+                }
             } catch (error) {
                 console.error('Download error:', error);
             }
@@ -26,24 +29,19 @@ const BreedsSelect = () => {
         loadBreeds();
     }, []);
 
-
     useEffect(() => {
         if (!selectedBreed) return;
 
         const loadImages = async () => {
-            setLoading(true);
+
             try {
-                const data = await getCatsImagesByBreed(selectedBreed, 1);
+                const data = await getCatsImagesByBreed(selectedBreed, 20);
                 setImages(data);
             } catch (error) {
                 console.error('Download error:', error);
-            } finally {
-                setLoading(false);
             }
         };
-
         loadImages();
-
 
         const selected = breeds.find((breed) => breed.id === selectedBreed);
         setBreedInfo(selected);
@@ -52,33 +50,24 @@ const BreedsSelect = () => {
 
 
     return (
-        <div className='grid grid-cols-3 gap-8'>
-
-
-            <ul className=''>
+        <div className='flex flex-row gap-5 font-[Poppins]'>
+            <ul className='basis-1/4 max-h-[100vh] overflow-y-auto pr-2 bg-violet-50 rounded-xl p-3 shadow-sm sticky top-0'>
                 {breeds.map((breed) => (
                     <li key={breed.id}>
-                        <button className='bg-blue-200 w-60 text-left p-2' onClick={() => setSelectedBreed(breed.id)} >
+                        <button className='w-full text-left px-2 py-1 hover:bg-violet-100 rounded-lg transition-colors duration-200' onClick={() => setSelectedBreed(breed.id)} >
                             {breed.name}
                         </button>
                     </li>
                 ))}
             </ul>
 
-
-
-
-
-            {loading && <p>Loading...</p>}
-
-            <div className=''>
+            <div className='basis-2/4'>
                 {images.map((img) => (
                     <CatImage key={img.id} src={img.url} />
                 ))}
             </div>
 
-            {breedInfo && <BreedInfo info={breedInfo} />}
-
+            <div className='basis-1/4 max-h-[100vh] overflow-y-auto pr-2 bg-violet-50 rounded-xl p-3 shadow-sm sticky top-0'> {breedInfo && <BreedInfo info={breedInfo} />}</div>
 
         </div>
     );

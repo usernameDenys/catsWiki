@@ -1,7 +1,9 @@
+import { LiaCatSolid } from "react-icons/lia";
 const Header = () => {
     return (
-        <div className=' bg-gray-500 pt-3 pb-5'>
-            <h1 className='text-center text-[40px] text-white'>CatsWiki</h1>
+        <div className='flex items-end justify-center h-20 mb-10'>
+            <a href="/"><LiaCatSolid size={64} /></a>
+            <a href="/" className='text-4xl text-center font-[Poppins]'>CatWiki</a>
         </div>
     )
 }
